@@ -1,0 +1,146 @@
+<div class="container d-flex">
+  <form class="col-12" (ngSubmit)="onSubmit()">
+    <h1>ANEXO UNO</h1>
+
+    <select class="form-select" aria-label="Default select example">
+      <option selected>Open this select menu</option>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+    </select>
+
+    <button type="button" class="btn btn-primary">Primary</button>
+<button type="button" class="btn btn-secondary">Secondary</button>
+<button type="button" class="btn btn-success">Success</button>
+<button type="button" class="btn btn-danger">Danger</button>
+<button type="button" class="btn btn-warning">Warning</button>
+<button type="button" class="btn btn-info">Info</button>
+<button type="button" class="btn btn-light">Light</button>
+<button type="button" class="btn btn-dark">Dark</button>
+
+<button type="button" class="btn btn-link">Link</button>
+
+
+
+    <h4>Establecimiento</h4>
+    <mat-form-field appearance="outline" class="" class="col-12">
+      <mat-label>Número Oficial</mat-label>
+      <mat-select [(value)]="establecimientoSeleccionado"
+        (selectionChange)="seleccionadoEstablecimiento()">
+        <mat-option value="0">1</mat-option>
+        <mat-option value="1">2</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+
+    <div *ngIf="empresa !== undefined" class="d-flex flex-wrap">
+
+    <mat-label class="col-6">Establecimiento N° Oficial: {{empresa?.numeroEstablecimiento}} </mat-label>
+    <mat-label class="col-6">Razón Social: {{empresa?.razonSocial}} </mat-label>
+    <mat-label class="col-6">Domicilio: {{empresa?.domicilio}} </mat-label>
+    <mat-label class="col-6">Tel/Fax {{empresa?.telfax}} </mat-label>
+    <mat-label class="col-6">Localidad {{empresa?.localidad}} </mat-label>
+    <mat-label class="col-6">Dto/Partido {{empresa?.dtoPartido}} </mat-label>
+    <mat-label class="col-6">Provincia {{empresa?.provincia}} </mat-label>
+    <mat-label class="col-6">Supervisor {{empresa?.supervisor}} </mat-label>
+    <mat-label class="col-6">Responsable por el S.I.V {{empresa?.responsableSIV}} </mat-label>
+  </div>
+
+
+
+
+
+    <mat-divider></mat-divider>
+    <h4>Área Roedores</h4>
+    <mat-form-field appearance="outline" class="col-6">
+      <mat-label>Fecha de Inicio</mat-label>
+      <input matInput [matDatepicker]="pickerInicio">
+      <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+      <mat-datepicker #pickerInicio></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="col-6">
+      <mat-label>Fecha de Fin</mat-label>
+      <input matInput [matDatepicker]="pickerFin">
+      <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFin></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-12">
+      <mat-label>Producto</mat-label>
+      <mat-select  [(value)]="raticidaSeleccionado"
+      (selectionChange)="seleccionadoRaticida()">
+        <mat-option value="0">Rataplus</mat-option>
+        <mat-option value="1">RatitasMueran</mat-option>
+        <mat-option value="2">SinRatas</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <div *ngIf="raticida !== undefined" class="d-flex flex-wrap">
+      <mat-label class="col-6">Nombre: {{raticida?.nombre}} </mat-label>
+      <mat-label class="col-6">Principio activo: {{raticida?.principioActivo}} </mat-label>
+      <mat-label class="col-6">Aprobado por SENASA Resolución N°: {{raticida?.ResolucionSENASA}} </mat-label>
+      <mat-label class="col-6">Año de aprobacion: {{raticida?.anioResolucion}} </mat-label>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <table mat-table [dataSource]="dataSource"
+      class="mat-elevation-z8 col-12 mb-2">
+
+      <ng-container matColumnDef="letra">
+        <th mat-header-cell *matHeaderCellDef> Letra </th>
+        <td mat-cell *matCellDef="let element"> {{element.letra}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="tiempo">
+        <th mat-header-cell *matHeaderCellDef> Tiempo </th>
+        <td mat-cell *matCellDef="let element"> {{element.tiempo}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef class="col-1"> Acciones </th>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button type="button"
+            (click)="eliminar(element.letra)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-label>Frecuencia de sector/es</mat-label>
+    <mat-form-field appearance="outline">
+      <mat-label>Sector/es</mat-label>
+      <mat-select [formControl]="selectorSector" multiple>
+        <mat-option *ngFor="let sector of filtrarSectoresAgregados()"
+          [value]="sector.sector">{{sector.sector}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>Tiempo</mat-label>
+      <input matInput [formControl]="tiempoSector">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Medida de tiempo</mat-label>
+      <mat-select [formControl]="tipoTiempo">
+        <mat-option value="1">Hora/s</mat-option>
+        <mat-option value="2">Día/s</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-icon-button type="button" (click)="agregarSectores()">
+      <mat-icon>add</mat-icon>
+    </button>
+
+
+
+  </form>
+</div>
